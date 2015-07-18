@@ -1,0 +1,126 @@
+set nocompatible
+set ignorecase
+set smartcase
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
+syntax enable
+syntax on
+set autoindent
+set smartindent
+set nu
+set incsearch
+set hlsearch
+set showmatch
+set mouse=a
+set selection=exclusive
+set selectmode=mouse,key
+map <s-tab> :tabnext <cr>
+set nobackup
+set noswapfile
+
+filetype off
+
+" ycm config
+nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+
+let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
+let g:ycm_autoclose_preview_window_after_insertion = 1
+
+" ultisnips config
+" make YCM compatible with UltiSnips (using supertab)
+let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+let g:SuperTabDefaultCompletionType = '<C-n>'
+
+" better key bindings for UltiSnipsExpandTrigger
+
+let g:UltiSnipsExpandTrigger = "<tab>"
+let g:UltiSnipsJumpForwardTrigger = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+
+
+" the Omni-Completion tip window to close when a selection is made
+"autocmd CompleteDone * pclose
+"autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+"autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+
+
+"Nerdtree settings
+let g:nerdtree_tabs_open_on_console_startup=1
+let g:nerdtree_tabs_smart_startup_focus = 1
+let g:nerdtree_tabs_open_on_new_tab = 1
+let g:nerdtree_tabs_meaningful_tab_names = 1
+let g:nerdtree_tabs_autoclose = 1
+let g:nerdtree_tabs_synchronize_view = 1
+let g:nerdtree_tabs_synchronize_focus = 1
+let g:nerdtree_tabs_focus_on_files = 1
+autocmd VimEnter * NERDTree
+"autocmd VimEnter * NERDTreeMirror
+"autocmd VimEnter * NERDTreeMirrorOpen
+"autocmd VimEnter * NERDTreeTabsOpen
+autocmd VimEnter * wincmd p
+
+" startify configure
+let g:startify_custom_header = [
+            \ '	+-----------------------------------+',
+            \ '	|  What hurts more, the pain of     |',
+            \ '	|  hard work, or the pain of regret?|',
+            \ '	+----------------+------------------+',
+            \]
+
+let g:startify_session_persistence = 1
+let g:startify_session_autoload    = 1
+let g:startify_enable_special      = 0
+let g:startify_change_to_dir       = 0
+
+
+" airline configuration
+set laststatus=2
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme= 'dark'
+"if has('gui_running')
+	"let g:airline_theme= 'dark'
+"else
+	"let g:airline_theme= 'light'
+"endif
+
+" Vindle Configuration
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+     
+Plugin 'gmarik/Vundle.vim'
+	   
+" My vim scripts
+Plugin 'The-NERD-Commenter'
+Plugin 'a.vim'
+Plugin 'ervandew/supertab'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'rdnetto/YCM-Generator'
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
+"Plugin 'Shougo/unite.vim'
+"Plugin 'Shougo/vimfiler.vim'
+"Plugin 'Raimondi/delimitMate'
+Plugin 'jiangmiao/auto-pairs'
+Plugin 'scrooloose/nerdtree'
+Plugin 'jistr/vim-nerdtree-tabs'
+Plugin 'mhinz/vim-startify'
+Plugin 'bling/vim-airline'
+Plugin 'tpope/vim-fugitive'
+"Plugin 'justmao945/vim-clang'
+
+"Plugin 'easymotion/vim-easymotion'
+
+"colors configuration
+Plugin 'flazz/vim-colorschemes'
+" End my vim scripts
+
+call vundle#end()            " required
+filetype plugin indent on    " required
+
+
+"color theme configuration
+let g:solarized_termcolors=256
+"colorscheme solarized
+colorscheme molokai
