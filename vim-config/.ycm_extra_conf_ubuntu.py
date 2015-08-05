@@ -59,6 +59,8 @@ flags = [
 # For a C project, you would set this to 'c' instead of 'c++'.
 '-x',
 'c++',
+'-isystem',
+'./bundle/YouCompleteMe/third_party/ycmd/cpp/BoostParts',
 '-I',
 '.',
 '-isystem',
@@ -66,6 +68,8 @@ flags = [
 '/usr/include/c++/4.8.4',
 '-isystem',
 '/usr/include',
+'-isystem',
+'/usr/local/include',
 '-isystem',
 '/usr/local/llvm_root_dir/include/c++/v1',
 '-isystem',
