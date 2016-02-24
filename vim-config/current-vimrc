@@ -16,7 +16,7 @@ set mouse=a
 "set selection=exclusive
 set selection=inclusive
 set selectmode=mouse,key
-map <s-tab> :tabnext <cr>
+map <s-tab> :bnext <cr>
 set nobackup
 set noswapfile
 
@@ -79,7 +79,6 @@ let g:startify_change_to_dir       = 0
 " airline configuration
 set laststatus=2
 let g:airline#extensions#tabline#enabled = 1
-let g:airline_theme= 'dark'
 "if has('gui_running')
 	"let g:airline_theme= 'dark'
 "else
@@ -112,10 +111,14 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'LaTeX-Box-Team/LaTeX-Box'
 
+
+" configure the nerdtree window
+let g:NERDTreeWinPos = "right"
 "Plugin 'easymotion/vim-easymotion'
 
 "colors configuration
 Plugin 'flazz/vim-colorschemes'
+Plugin 'vim-airline/vim-airline-themes'
 " End my vim scripts
 
 call vundle#end()            " required
@@ -123,11 +126,17 @@ filetype plugin indent on    " required
 
 
 "color theme configuration
-let g:solarized_termcolors=256
+"let g:solarized_termcolors=256
 "colorscheme solarized
-colorscheme molokai
-
-
+"colorscheme molokai
+if has('gui_running')
+	colorscheme codeschool
+	let g:airline_theme= 'base16_codeschool'
+	"let g:airline_theme= 'jellybeans'
+else
+	colorscheme molokai
+	let g:airline_theme= 'jellybeans'
+endif
 
 " F5 to run c/cpp/java/python
 map <F5> :call CompileRun()<CR>
