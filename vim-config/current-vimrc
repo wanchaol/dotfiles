@@ -19,6 +19,8 @@ set selectmode=mouse,key
 map <s-tab> :bnext <cr>
 set nobackup
 set noswapfile
+set clipboard=unnamed
+
 
 filetype off
 
@@ -144,7 +146,7 @@ func! CompileRun()
 exec "w"
 if expand('%:e') == "c"
     exec "!gcc % -o %<.c&&./%<.c"
-elseif expand('%:e') == "cpp"
+elseif expand('%:e') == "cpp" || expand('%:e') == "cc"
     exec "!g++ -std=c++11 % -o %<&& ./%< && rm %<"
 elseif expand('%:e') == "java"
     exec "!javac %&&java %:r"
