@@ -11,6 +11,12 @@ if which jenv > /dev/null; then eval "$(jenv init -)"; fi
 
 #export HD_HOME=~/tools/hd
 export JAVA_HOME="$(/usr/libexec/java_home)"
+
+export BOOST_VERSION=1.60.0_1
+export BOOST_HOME=/usr/local/Cellar/boost/${BOOST_VERSION}
+export EIGEN_VERSION=3.2.8
+export EIGEN_HOME=/usr/local/Cellar/eigen/${EIGEN_VERSION}/include/eigen3/  
+
 export HADOOP_VERSION=2.7.2
 export HADOOP_BASE=/usr/local/Cellar/hadoop/${HADOOP_VERSION}
 export HADOOP_HOME=${HADOOP_BASE}/libexec
