@@ -76,6 +76,8 @@ flags = [
 '/Library/Developer/CommandLineTools/usr/bin/../lib/clang/6.0/include',
 '-isystem',
 '/Library/Developer/CommandLineTools/usr/include',
+'-isystem',
+'/usr/local/Cellar/eigen/3.2.8/include/eigen3/'
 ]
 
 
