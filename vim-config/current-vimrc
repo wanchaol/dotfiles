@@ -1,11 +1,13 @@
+syntax enable
+syntax on
 set nocompatible
 set ignorecase
 set smartcase
 set shiftwidth=4
 set softtabstop=4
 set tabstop=4
-syntax enable
-syntax on
+set expandtab
+set smarttab
 set autoindent
 set smartindent
 set nu
@@ -29,6 +31,7 @@ nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
 let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 let g:ycm_autoclose_preview_window_after_insertion = 1
+let g:ycm_autoclose_preview_window_after_completion=1
 
 " ultisnips config
 " make YCM compatible with UltiSnips (using supertab)
@@ -58,6 +61,7 @@ let g:nerdtree_tabs_autoclose = 1
 let g:nerdtree_tabs_synchronize_view = 1
 let g:nerdtree_tabs_synchronize_focus = 1
 let g:nerdtree_tabs_focus_on_files = 1
+let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
 autocmd VimEnter * NERDTree
 "autocmd VimEnter * NERDTreeMirror
 "autocmd VimEnter * NERDTreeMirrorOpen
@@ -111,7 +115,8 @@ Plugin 'mhinz/vim-startify'
 Plugin 'bling/vim-airline'
 Plugin 'tpope/vim-fugitive'
 Plugin 'terryma/vim-multiple-cursors'
-Plugin 'LaTeX-Box-Team/LaTeX-Box'
+"Plugin 'LaTeX-Box-Team/LaTeX-Box'
+Plugin 'hynek/vim-python-pep8-indent'
 
 
 " configure the nerdtree window
@@ -126,13 +131,13 @@ Plugin 'vim-airline/vim-airline-themes'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
-colorscheme brogrammer
+"colorscheme brogrammer
+colorscheme molokai
 let g:airline_theme= 'jellybeans'
 
 "if has('gui_running')
 	""colorscheme codeschool
 	"colorscheme brogrammer
-	""colorscheme molokai
 	""let g:airline_theme= 'base16_codeschool'
 	"let g:airline_theme= 'jellybeans'
 "else
@@ -155,3 +160,19 @@ elseif expand('%:e') == "py"
     exec "!python %"
 endif
 endfun
+
+"python config with virtualenv support
+
+py << EOF
+import os
+import sys
+if 'VIRTUAL_ENV' in os.environ:
+  project_base_dir = os.environ['VIRTUAL_ENV']
+  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+  execfile(activate_this, dict(__file__=activate_this))
+EOF
+
+
+
+
+
