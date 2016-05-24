@@ -2,6 +2,8 @@ export CLICOLOR=1
 
 export CLASSPATH=~/Documents/JavaLibs/'*':.
 
+export PATH="/usr/local/sbin:$PATH"
+
 source /usr/local/bin/virtualenvwrapper.sh
 source ~/.profile
 
