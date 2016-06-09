@@ -71,8 +71,7 @@ autocmd VimEnter * wincmd p
 " startify configure
 let g:startify_custom_header = [
 			\ '	+-----------------------------------+',
-			\ '	|  Think of Ruoying, you must work  |',
-			\ '	|  hard, hard, hard enough!!!!      |',
+			\ '	|  This is an custom header example |',
 			\ '	+----------------+------------------+',
 			\]
 
