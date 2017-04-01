@@ -46,7 +46,7 @@ flags = [
     '-DNDEBUG',
     # You 100% do NOT need -DUSE_CLANG_COMPLETER in your flags; only the YCM
     # source code needs it.
-    '-DUSE_CLANG_COMPLETER',
+    # '-DUSE_CLANG_COMPLETER',
     # THIS IS IMPORTANT! Without a "-std=<something>" flag, clang won't know which
     # language to use when compiling headers. So it will guess. Badly. So C++
     # headers will be compiled as C headers. You don't want that so ALWAYS specify
@@ -61,8 +61,7 @@ flags = [
     # For a C project, you would set this to 'c' instead of 'c++'.
     '-x',
     'c++',
-    '-I',
-    '.',
+    '-I.',
     '-isystem',
     # apt-get install libc++ or change this value to libstdc++
     '/usr/include/c++/v1',
@@ -73,7 +72,7 @@ flags = [
     '-isystem',
     '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/',
     '-isystem',
-    '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/8.0.0/include/',
+    '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/8.1.0/include/',
     '-isystem',
     '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/',
     '-I../include'
@@ -100,7 +99,7 @@ def DirectoryOfThisScript():
     return os.path.dirname(os.path.abspath(__file__))
 
 
-def MakeRelativePathsInFlagsAbsolute(flags, working_directory):
+def MakeRelativePathsInFlagsAbsolute(flags, working_directory, current_file_dir):
     if not working_directory:
         return list(flags)
     new_flags = []
@@ -121,7 +120,7 @@ def MakeRelativePathsInFlagsAbsolute(flags, working_directory):
 
             if flag.startswith(path_flag):
                 path = flag[len(path_flag):]
-                new_flag = path_flag + os.path.join(working_directory, path)
+                new_flag = path_flag + os.path.join(current_file_dir, path)
                 break
 
         if new_flag:
@@ -172,9 +171,11 @@ def FlagsForFile(filename, **kwargs):
         except ValueError:
             pass
     else:
-        # relative_to = DirectoryOfThisScript()
-        # final_flags = MakeRelativePathsInFlagsAbsolute(flags, relative_to)
-        final_flags = MakeRelativePathsInFlagsAbsolute(flags, filename)
+        relative_to = DirectoryOfThisScript()
+        current_file_dir = os.path.dirname(os.path.abspath(filename))
+        final_flags = MakeRelativePathsInFlagsAbsolute(
+            flags, relative_to, current_file_dir)
+        # final_flags = MakeRelativePathsInFlagsAbsolute(flags, filename)
 
     return {
         'flags': final_flags,
