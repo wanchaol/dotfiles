@@ -1,10 +1,7 @@
+" general config
 set nocompatible
 set ignorecase
 set smartcase
-set shiftwidth=4
-set softtabstop=4
-set tabstop=4
-set expandtab
 set smarttab
 set autoindent
 set smartindent
@@ -17,12 +14,15 @@ set mouse=a
 " set selection=exclusive
 set selection=inclusive
 set selectmode=mouse,key
-map <s-tab> :bnext <cr>
+map <s-tab> :bnext<cr>
+map <c-tab> :tabNext<cr>
 set nobackup
 set noswapfile
 set clipboard=unnamed
 set laststatus=2
 set encoding=utf-8
+
+syntax on
 
 " set leaderkey
 let mapleader=" "
@@ -40,15 +40,16 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'vim-scripts/a.vim'
 Plug 'rhysd/vim-clang-format'
 Plug 'ervandew/supertab'
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer' }
-"Plun 'rdnetto/YCM-Generator'
-"
+Plug 'Valloric/YouCompleteMe'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
+
+Plug 'plytophogy/vim-virtualenv'
 
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'jistr/vim-nerdtree-tabs'
+Plug 'jlanzarotta/bufexplorer'
 "
 Plug 'w0rp/ale'
 
@@ -65,9 +66,11 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-surround'
 
 "colors configuration
-Plug 'dracula/vim'
+"Plug 'fatih/molokai'
+Plug 'altercation/vim-colors-solarized'
 
 call plug#end()
+
 
 " assuming you want to use ultisnips snippet engine
 let g:UltiSnipsSnippetDirectories=['UltiSnips']
@@ -80,9 +83,15 @@ let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 
 
 " ycm config
+" YCM must use the same Python version it's linked against
+"let g:ycm_path_to_python_interpreter = '/usr/local/bin/python3'
+let g:ycm_python_binary_path = 'python'
+" Default ycm_extra_conf.py for fbcode
+"let g:ycm_global_ycm_extra_conf = '/home/wanchaol/.vim/plugged/YouCompleteMe/ycm_extra_conf-cpp.py'
+
+
 nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
-let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_autoclose_preview_window_after_completion=1
 
@@ -108,22 +117,16 @@ let g:clang_format#style_options = {
 
 " Nerdtree settings
 " configure the nerdtree window
-let g:nerdtree_tabs_open_on_console_startup=2
 let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
 nnoremap <Leader>ft :NERDTreeTabsToggle<CR>
 
 " fzf config
 nnoremap <Leader>ff :Files<CR>
-nnoremap <Leader>fb :Buffers<CR>
+nnoremap <Leader>fb :ToggleBufExplorer<CR>
 nnoremap <Leader>fh :History<CR>
 
-" ack.vim config with ag
-if executable('ag')
-  let g:ackprg = 'ag --vimgrep'
-endif
-
 " avoid ack output leak to terimal
-function Search(string) abort
+function AckSearch(string) abort
   let saved_shellpipe = &shellpipe
   let &shellpipe = '>'
   try
@@ -133,19 +136,23 @@ function Search(string) abort
   endtry
 endfunction
 
+if executable('ag')
+	let g:ackprg = 'ag --vimgrep'
+endif
 " key binding to ack.vim
-nnoremap <Leader>fs :call Search("")<left><left>
+nnoremap <Leader>fs :call AckSearch("")<left><left>
 
 "let g:ale_fix_on_save = 1
 
 " color themes
 if ! has('gui_running')
     set t_Co=256
-    colorscheme dracula
+    set background=dark
+    colorscheme solarized
 endif
 
 let g:lightline = {
-      \ 'colorscheme': 'Dracula',
+      \ 'colorscheme': 'solarized',
       \ 'component': {
       \   'readonly': '%{&readonly?"":""}',
       \ },
