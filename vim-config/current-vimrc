@@ -2,6 +2,9 @@
 set nocompatible
 set ignorecase
 set smartcase
+set tabstop=4
+set shiftwidth=4
+set expandtab
 set smarttab
 set autoindent
 set smartindent
@@ -18,21 +21,21 @@ map <s-tab> :bnext<cr>
 map <c-tab> :tabNext<cr>
 set nobackup
 set noswapfile
+" share the clipboard with sys
 set clipboard=unnamed
 set laststatus=2
-set encoding=utf-8
+set encoding=utf-8 
+
+" allow switch buffer without saving if there's changes
+set hidden
 
 syntax on
+" fix syntax hightlight problem on large files
+" http://vim.wikia.com/wiki/Fix_syntax_highlighting
+" autocmd BufEnter * :syntax sync fromstart
 
 " set leaderkey
 let mapleader=" "
-
-" Automatic installation for vim-plug
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
 
 call plug#begin('~/.vim/plugged')
 Plug 'scrooloose/nerdcommenter'
@@ -44,17 +47,15 @@ Plug 'Valloric/YouCompleteMe'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
+Plug 'sheerun/vim-polyglot'
 Plug 'plytophogy/vim-virtualenv'
 
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'jistr/vim-nerdtree-tabs'
 Plug 'jlanzarotta/bufexplorer'
-"
-Plug 'w0rp/ale'
 
 Plug 'itchyny/lightline.vim'
-"Plug 'sheerun/vim-polyglot'
 
 Plug 'terryma/vim-multiple-cursors'
 
@@ -65,8 +66,6 @@ Plug 'mileszs/ack.vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-surround'
 
-"colors configuration
-"Plug 'fatih/molokai'
 Plug 'altercation/vim-colors-solarized'
 
 call plug#end()
@@ -87,10 +86,11 @@ let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 "let g:ycm_path_to_python_interpreter = '/usr/local/bin/python3'
 let g:ycm_python_binary_path = 'python'
 " Default ycm_extra_conf.py for fbcode
-"let g:ycm_global_ycm_extra_conf = '/home/wanchaol/.vim/plugged/YouCompleteMe/ycm_extra_conf-cpp.py'
+"let g:ycm_globjl_ycm_extra_conf = '/home/wanchaol/.vim/plugged/YouCompleteMe/ycm_extra_conf-cpp.py'
 
 
 nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+nnoremap <leader>gs :YcmCompleter GetType<CR>
 
 let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_autoclose_preview_window_after_completion=1
