@@ -26,13 +26,20 @@ set clipboard=unnamed
 set laststatus=2
 set encoding=utf-8 
 
+" don't show mode in the cmd, to support echodoc
+set noshowmode
 " allow switch buffer without saving if there's changes
 set hidden
+" allow auto reload of files when some changes on disk (like git checkout)
+set autoread
+au CursorHold,CursorMoved * checktime
+au FocusGained,BufEnter * checktime
 
 syntax on
 " fix syntax hightlight problem on large files
 " http://vim.wikia.com/wiki/Fix_syntax_highlighting
-" autocmd BufEnter * :syntax sync fromstart
+autocmd BufEnter * :syntax sync fromstart
+
 
 " set leaderkey
 let mapleader=" "
@@ -41,20 +48,24 @@ call plug#begin('~/.vim/plugged')
 Plug 'scrooloose/nerdcommenter'
 
 Plug 'vim-scripts/a.vim'
-Plug 'rhysd/vim-clang-format'
+"Plug 'rhysd/vim-clang-format'
 Plug 'ervandew/supertab'
 Plug 'Valloric/YouCompleteMe'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
+Plug 'Shougo/echodoc.vim'
 
-Plug 'sheerun/vim-polyglot'
 Plug 'plytophogy/vim-virtualenv'
 
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'jistr/vim-nerdtree-tabs'
 Plug 'jlanzarotta/bufexplorer'
+Plug 'tpope/vim-fugitive'
 
+Plug 'altercation/vim-colors-solarized'
+Plug 'nathanaelkane/vim-indent-guides'
+Plug 'mhinz/vim-startify'
 Plug 'itchyny/lightline.vim'
 
 Plug 'terryma/vim-multiple-cursors'
@@ -65,8 +76,6 @@ Plug 'mileszs/ack.vim'
 
 Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-surround'
-
-Plug 'altercation/vim-colors-solarized'
 
 call plug#end()
 
@@ -103,22 +112,27 @@ let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
 let g:SuperTabDefaultCompletionType = '<C-n>'
 
 
+" cpp file indent local config 
+autocmd Filetype c,cpp,cc,h,hpp setlocal expandtab tabstop=2 shiftwidth=2
 " vim-clang-format config
-" autoformat enable
-autocmd FileType c,cpp,cc,h,hpp ClangFormatAutoEnable
-"  clang-format customization
-let g:clang_format#style_options = {
-            \ "AccessModifierOffset" : -4,
-            \ "AllowShortIfStatementsOnASingleLine" : "true",
-            \ "AlwaysBreakTemplateDeclarations" : "true",
-            \ "Standard" : "C++11",
-            \ "BreakBeforeBraces" : "Stroustrup"}
 
+" autoformat enable
+" autocmd FileType c,cpp,cc,h,hpp ClangFormatAutoEnable
 
 " Nerdtree settings
 " configure the nerdtree window
 let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
 nnoremap <Leader>ft :NERDTreeTabsToggle<CR>
+
+" don't change to dir base on file open
+let g:startify_change_to_dir = 0
+let g:startify_bookmarks = [ '~/pytorch'  ]
+
+" automatically load a session if cur dir in bootmark
+let g:startify_session_autoload = 1
+" let SLoad automatically restore the last session used, combined with tmux
+let g:startify_session_persistence = 1
+"let g:startify_files_number = 20
 
 " fzf config
 nnoremap <Leader>ff :Files<CR>
