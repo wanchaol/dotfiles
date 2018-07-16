@@ -22,7 +22,8 @@ map <c-tab> :tabNext<cr>
 set nobackup
 set noswapfile
 " share the clipboard with sys
-set clipboard=unnamed
+set clipboard+=unnamed
+
 set laststatus=2
 set encoding=utf-8 
 
@@ -39,6 +40,7 @@ syntax on
 " fix syntax hightlight problem on large files
 " http://vim.wikia.com/wiki/Fix_syntax_highlighting
 autocmd BufEnter * :syntax sync fromstart
+set redrawtime=10000
 
 
 " set leaderkey
@@ -54,7 +56,7 @@ Plug 'Valloric/YouCompleteMe'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'Shougo/echodoc.vim'
-"Plug 'octol/vim-cpp-enhanced-highlight'
+Plug 'octol/vim-cpp-enhanced-highlight'
 
 Plug 'plytophogy/vim-virtualenv'
 
@@ -124,7 +126,7 @@ autocmd Filetype c,cpp,cc,h,hpp setlocal expandtab tabstop=2 shiftwidth=2
 " Nerdtree settings
 " configure the nerdtree window
 let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
-nnoremap <Leader>ft :NERDTreeTabsToggle<CR>
+nnoremap <Leader>ft :NERDTreeFind<CR>
 
 " don't change to dir base on file open
 let g:startify_change_to_dir = 0
