@@ -85,6 +85,9 @@ call plug#end()
 " <language server config>
 let g:lsp_log_file = expand('/tmp/vim-lsp.log')
 nnoremap <leader>jd :LspDefinition<CR>
+nnoremap <leader>jr :LspReferences<CR>
+nnoremap <f2>jr :LspRename<CR>
+
 " Autocomplete for lsp
 let g:lsp_async_completion=1
 imap <c-space> <Plug>(asyncomplete_force_refresh)
@@ -115,13 +118,16 @@ if executable('cquery')
       \ 'initialization_options': { 
       \     'cacheDirectory': '/tmp/cquery/cache',
       \     'index': {
-      \         'blacklist': ['.*/build/third_party/.*']
+      \         'blacklist': ['.*/build/.*', '.*/third_party/.*']
       \     },
       \     'completion': {
-      \         'includeBlacklist': ['.*/build/third_party/.*'],
+      \         'includeBlacklist': ['.*/build/.*', '.*/third_party/.*'],
       \         'enableSnippets': v:true,
       \     },
-      \     'disableInitialIndex' : v:true
+      \     'disableInitialIndex' : v:true,
+      \     'codeLens' : {
+      \         'localVariables': v:false,
+      \     }
       \  },
       \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
       \ })
