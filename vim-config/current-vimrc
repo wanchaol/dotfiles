@@ -13,6 +13,7 @@ set nu
 set incsearch
 set hlsearch
 set showmatch
+set cursorline
 set mouse=a
 " set selection=exclusive
 set selection=inclusive
@@ -47,16 +48,26 @@ set redrawtime=10000
 let mapleader=" "
 
 call plug#begin('~/.vim/plugged')
+Plug 'ervandew/supertab'
 Plug 'scrooloose/nerdcommenter'
 
-Plug 'vim-scripts/a.vim'
+"Plug 'vim-scripts/a.vim'
 "Plug 'rhysd/vim-clang-format'
-Plug 'ervandew/supertab'
 Plug 'Valloric/YouCompleteMe'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'Shougo/echodoc.vim'
 Plug 'octol/vim-cpp-enhanced-highlight'
+
+"Plug 'prabirshrestha/asyncomplete.vim'
+"Plug 'prabirshrestha/async.vim'
+"Plug 'prabirshrestha/vim-lsp'
+"Plug 'prabirshrestha/asyncomplete-lsp.vim'
+"Plug 'pdavydov108/vim-lsp-cquery'
+
+" Optional: flake8 diagnostics for Python
+ "Plug 'alfredodeza/khuno.vim'
+Plug 'w0rp/ale'
 
 Plug 'plytophogy/vim-virtualenv'
 
@@ -70,6 +81,7 @@ Plug 'altercation/vim-colors-solarized'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'mhinz/vim-startify'
 Plug 'itchyny/lightline.vim'
+Plug 'mgee/lightline-bufferline'
 
 Plug 'terryma/vim-multiple-cursors'
 
@@ -79,6 +91,9 @@ Plug 'mileszs/ack.vim'
 
 Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-surround'
+
+" markdown
+Plug 'gabrielelana/vim-markdown'
 
 call plug#end()
 
@@ -138,7 +153,7 @@ let g:startify_session_autoload = 1
 let g:startify_session_persistence = 1
 "let g:startify_files_number = 20
 
-" fzf config
+" navigation config
 nnoremap <Leader>ff :Files<CR>
 nnoremap <Leader>fb :ToggleBufExplorer<CR>
 nnoremap <Leader>fh :History<CR>
@@ -160,7 +175,8 @@ endif
 " key binding to ack.vim
 nnoremap <Leader>fs :call AckSearch("")<left><left>
 
-"let g:ale_fix_on_save = 1
+" markdown config
+let g:markdown_enable_conceal = 1
 
 " color themes
 if ! has('gui_running')
@@ -169,14 +185,47 @@ if ! has('gui_running')
     colorscheme solarized
 endif
 
+" lightline and bufferline config
 let g:lightline = {
       \ 'colorscheme': 'solarized',
       \ 'component': {
       \   'readonly': '%{&readonly?"":""}',
       \ },
-      \ 'separator': { 'left': '', 'right': '' },
-      \ 'subseparator': { 'left': '', 'right': '' }
       \ }
+
+let g:lightline.tabline          = {'left': [['buffers']], 'right': [['close']]}
+let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
+let g:lightline.component_type   = {'buffers': 'tabsel'}
+set showtabline=2
+"autocmd BufWritePost,TextChanged,TextChangedI * call lightline#update()
+let g:lightline#bufferline#show_number = 2
+let g:lightline#bufferline#number_map = {
+\ 0: '⁰', 1: '¹', 2: '²', 3: '³', 4: '⁴',
+\ 5: '⁵', 6: '⁶', 7: '⁷', 8: '⁸', 9: '⁹'}
+"let g:lightline#bufferline#min_buffer_count = 2
+
+nmap <Leader>1 <Plug>lightline#bufferline#go(1)
+nmap <Leader>2 <Plug>lightline#bufferline#go(2)
+nmap <Leader>3 <Plug>lightline#bufferline#go(3)
+nmap <Leader>4 <Plug>lightline#bufferline#go(4)
+nmap <Leader>5 <Plug>lightline#bufferline#go(5)
+nmap <Leader>6 <Plug>lightline#bufferline#go(6)
+nmap <Leader>7 <Plug>lightline#bufferline#go(7)
+nmap <Leader>8 <Plug>lightline#bufferline#go(8)
+nmap <Leader>9 <Plug>lightline#bufferline#go(9)
+nmap <Leader>0 <Plug>lightline#bufferline#go(10)
+
+" lint
+let g:ale_linters = {
+\   'python': ['flake8']
+\}
+
+
+" Indent guidelines color
+let indent_guides_auto_colors = 0
+"let indent_guides_guide_size = 1
+au VimEnter,Colorscheme * hi! IndentGuidesOdd  ctermfg=8 ctermbg=8
+au VimEnter,Colorscheme * hi! IndentGuidesEven ctermfg=8 ctermbg=0
 
 " F5 to run c/cpp/java/python
 map <F5> :call CompileRun()<CR>
