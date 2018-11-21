@@ -14,9 +14,10 @@ set incsearch
 set hlsearch
 set showmatch
 set cursorline
+
+" set mouse and hover
 set mouse=a
-"set selection=exclusive
-set selection=inclusive
+set selection=exclusive
 set selectmode=mouse,key
 map <s-tab> :bnext<cr>
 map <c-tab> :tabNext<cr>
@@ -29,10 +30,8 @@ set clipboard+=unnamed
 "set paste
 
 set laststatus=2
-set encoding=utf-8 
+set encoding=utf-8
 
-" don't show mode in the cmd, to support echodoc
-set noshowmode
 " allow switch buffer without saving if there's changes
 set hidden
 " allow auto reload of files when some changes on disk (like git checkout)
@@ -51,6 +50,7 @@ set foldmethod=indent
 " disable initial folding
 set nofoldenable            " ... but have folds open by default
 
+
 " set leaderkey
 let mapleader=" "
 
@@ -64,12 +64,12 @@ Plug 'honza/vim-snippets'
 Plug 'Shougo/echodoc.vim'
 
 Plug 'w0rp/ale'
+Plug 'majutsushi/tagbar'
 
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'jistr/vim-nerdtree-tabs'
 Plug 'jlanzarotta/bufexplorer'
-Plug 'tpope/vim-fugitive'
 
 Plug 'altercation/vim-colors-solarized'
 Plug 'nathanaelkane/vim-indent-guides'
@@ -81,10 +81,14 @@ Plug 'terryma/vim-multiple-cursors'
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
-Plug 'mileszs/ack.vim'
+Plug 'mhinz/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)'] }
 
 Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-surround'
+
+" git
+Plug 'tpope/vim-fugitive'
+Plug 'gregsexton/gitv', {'on': ['Gitv']}
 
 " markdown
 Plug 'gabrielelana/vim-markdown'
@@ -100,7 +104,7 @@ let g:UltiSnipsExpandTrigger = "<tab>"
 let g:UltiSnipsJumpForwardTrigger = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 
-" cpp file indent local config 
+" cpp file indent local config
 autocmd Filetype c,cpp,cc,h,hpp setlocal expandtab tabstop=2 shiftwidth=2
 " vim-clang-format config
 
@@ -125,23 +129,14 @@ nnoremap <Leader>fb :ToggleBufExplorer<CR>
 nnoremap <Leader>fh :History<CR>
 
 
-" Ack/ag config
-" avoid ack output leak to terimal
-function AckSearch(string) abort
-  let saved_shellpipe = &shellpipe
-  let &shellpipe = '>'
-  try
-    execute 'Ack!' shellescape(a:string, 1)
-  finally
-    let &shellpipe = saved_shellpipe
-  endtry
-endfunction
+" vim grepper config
+nnoremap <leader>gg :Grepper -tool git<cr>
+nnoremap <leader>ga :Grepper -tool ag<cr>
+nnoremap <leader>gs :Grepper -tool ag -side<cr>
+nnoremap <leader>*  :Grepper -tool ag -cword -noprompt<cr>
 
-if executable('ag')
-	let g:ackprg = 'ag --vimgrep'
-endif
-" key binding to ack.vim
-nnoremap <Leader>fs :call AckSearch("")<left><left>
+nmap gs <plug>(GrepperOperator)
+xmap gs <plug>(GrepperOperator)
 
 " markdown config
 let g:markdown_enable_conceal = 1
@@ -153,15 +148,22 @@ if ! has('gui_running')
     colorscheme solarized
 endif
 
+" tagbar config
+nmap <F8> :TagbarToggle<CR>
+
 " lightline and bufferline config
 let g:lightline = {
       \ 'colorscheme': 'solarized',
       \ 'active': {
       \   'left': [ [ 'mode'],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ],
+      \             ['tagbar']]
       \ },
       \ 'component_function': {
       \   'gitbranch': 'fugitive#head'
+      \ },
+      \ 'component': {
+      \   'tagbar': '%{tagbar#currenttag("[%s]", "", "f")}',
       \ },
       \}
 
@@ -176,10 +178,13 @@ nmap <Leader>8 <Plug>(wintabs_tab_8)
 nmap <Leader>9 <Plug>(wintabs_tab_9)
 nmap <C-H> <Plug>(wintabs_previous)
 nmap <C-L> <Plug>(wintabs_next)
+nmap <C-K> <Plug>(wintabs_close)
+
 
 " lint and ale config
+"let g:ale_set_balloons=1
+set balloonevalterm
 let g:ale_set_balloons=1
-let b:ale_set_balloons=1
 
 let g:ale_cpp_cquery_executable="/usr/bin/cquery-language-server"
 let g:ale_cpp_cquery_cache_directory="/tmp/cquery"
@@ -189,10 +194,23 @@ let g:ale_linters = {
 \   'cpp': ['cquery'],
 \}
 
+let g:ale_linters_ignore = {
+\   'python': ['pyls'],
+\}
+
+let g:ale_fixers = {
+\   '*': ['remove_trailing_lines', 'trim_whitespace'],
+\}
+
+let g:ale_fix_on_save = 1
+let g:ale_close_preview_on_insert=1
+
 let g:ale_completion_enabled = 1
+let g:ale_completion_max_suggestions=10
 let g:SuperTabDefaultCompletionType = '<C-n>'
 noremap <leader>jd :ALEGoToDefinition<CR>
 noremap <leader>jr :ALEFindReferences<CR>
+nnoremap <silent> K :ALEHover<CR>
 
 
 " source header file switch keymap
@@ -211,7 +229,7 @@ exec "w"
 if expand('%:e') == "c"
     exec "!gcc % -o %<.c&&./%<.c"
 elseif expand('%:e') == "cpp" || expand('%:e') == "cc"
-    exec "!g++ -std=c++11 % -o %<&& ./%< && rm %<" 
+    exec "!g++ -std=c++11 % -o %<&& ./%< && rm %<"
 elseif expand('%:e') == "java"
     exec "!javac %&&java %:r"
 elseif expand('%:e') == "py"
