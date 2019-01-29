@@ -191,7 +191,7 @@ let g:ale_cpp_cquery_cache_directory="/tmp/cquery"
 
 let g:ale_linters = {
 \   'python': ['flake8', 'pyls'],
-\   'cpp': ['cquery'],
+\   'cpp': ['cquery', 'clangtidy'],
 \}
 
 let g:ale_linters_ignore = {
