@@ -74,6 +74,9 @@ pushd ccache
 ./autogen.sh
 ./configure
 make install prefix=~/ccache
+
+# make CFLAGS='-Wno-implicit-fallthrough' install prefix=/scratch/wanchaol/ccache
+
 popd && popd
 
 mkdir -p ~/ccache/lib
