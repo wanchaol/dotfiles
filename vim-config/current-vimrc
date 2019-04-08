@@ -24,6 +24,8 @@ map <c-tab> :tabNext<cr>
 set nobackup
 set noswapfile
 
+set backspace=indent,eol,start  " more powerful backspacing
+
 " share the clipboard with sys
 set clipboard+=unnamed
 
@@ -61,7 +63,7 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'ericcurtin/CurtineIncSw.vim'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
-Plug 'Shougo/echodoc.vim'
+Plug 'sheerun/vim-polyglot'
 
 Plug 'w0rp/ale'
 Plug 'majutsushi/tagbar'
@@ -71,17 +73,19 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'jistr/vim-nerdtree-tabs'
 Plug 'jlanzarotta/bufexplorer'
 
-Plug 'altercation/vim-colors-solarized'
+Plug 'joshdick/onedark.vim'
+
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'mhinz/vim-startify'
 Plug 'itchyny/lightline.vim'
 Plug 'zefei/vim-wintabs'
+Plug 'zefei/vim-wintabs-powerline'
 
 Plug 'terryma/vim-multiple-cursors'
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
-Plug 'mhinz/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)'] }
+Plug 'mhinz/vim-grepper'
 
 Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-surround'
@@ -123,6 +127,8 @@ let g:startify_session_autoload = 1
 let g:startify_session_persistence = 1
 "let g:startify_files_number = 20
 
+let g:bufExplorerSortBy='number'
+
 " navigation config
 nnoremap <Leader>ff :Files<CR>
 nnoremap <Leader>fb :ToggleBufExplorer<CR>
@@ -138,14 +144,28 @@ nnoremap <leader>*  :Grepper -tool ag -cword -noprompt<cr>
 nmap gs <plug>(GrepperOperator)
 xmap gs <plug>(GrepperOperator)
 
+runtime plugin/grepper.vim
+let g:grepper.ag.grepprg .= ' --noaffinity'
+
+
+
 " markdown config
 let g:markdown_enable_conceal = 1
 
 " color themes
 if ! has('gui_running')
     set t_Co=256
-    set background=dark
-    colorscheme solarized
+    "set background=dark
+    "colorscheme solarized
+    " set Vim-specific sequences for RGB colors
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum""]"
+
+    " onedark config
+    if (has("termguicolors"))
+        set termguicolors
+    endif
+    colorscheme onedark
 endif
 
 " tagbar config
@@ -153,7 +173,7 @@ nmap <F8> :TagbarToggle<CR>
 
 " lightline and bufferline config
 let g:lightline = {
-      \ 'colorscheme': 'solarized',
+      \ 'colorscheme': 'onedark',
       \ 'active': {
       \   'left': [ [ 'mode'],
       \             [ 'gitbranch', 'readonly', 'filename', 'modified' ],
@@ -186,7 +206,7 @@ nmap <C-K> <Plug>(wintabs_close)
 set balloonevalterm
 let g:ale_set_balloons=1
 
-let g:ale_cpp_cquery_executable="/usr/bin/cquery-language-server"
+let g:ale_cpp_cquery_executable="/usr/local/bin/cquery"
 let g:ale_cpp_cquery_cache_directory="/tmp/cquery"
 
 let g:ale_linters = {
@@ -198,9 +218,9 @@ let g:ale_linters_ignore = {
 \   'python': ['pyls'],
 \}
 
-let g:ale_fixers = {
-\   '*': ['remove_trailing_lines', 'trim_whitespace'],
-\}
+"let g:ale_fixers = {
+"\   '*': ['remove_trailing_lines', 'trim_whitespace'],
+"\}
 
 let g:ale_fix_on_save = 1
 let g:ale_close_preview_on_insert=1
