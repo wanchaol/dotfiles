@@ -1,4 +1,0 @@
-BasedOnStyle: google
-IndentWidth: 4
-BreakBeforeBraces: Allman
-AllowShortFunctionsOnASingleLine: false
