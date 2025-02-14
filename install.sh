@@ -38,7 +38,7 @@ else
     exit 1
 fi
 
-# Install packages
+# Install necessary packages
 install_package "nvim" "$INSTALLER neovim"
 install_package "rg" "$INSTALLER ripgrep"
 install_package "zsh" "$INSTALLER zsh"
