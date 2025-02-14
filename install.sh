@@ -21,6 +21,7 @@ install_package() {
 # Detect OS
 if [[ "$(uname)" == "Darwin" ]]; then
     echo "Detected macOS"
+    OS="macOS"
     INSTALLER="brew install"
     INSTALL_WEZTERM="brew install --cask wezterm"
     # Ensure Homebrew is installed
@@ -30,6 +31,7 @@ if [[ "$(uname)" == "Darwin" ]]; then
     fi
 elif [[ -f "/etc/os-release" ]] && grep -qi "ubuntu" /etc/os-release; then
     echo "Detected Ubuntu"
+    OS="Ubuntu"
     INSTALLER="sudo apt-get install -y"
     INSTALL_WEZTERM="sudo apt install wezterm"
     sudo apt update
@@ -57,6 +59,13 @@ fi
 # move configs to dst
 cp "zshrc" "~/.zshrc"
 mkdir -p "~/.config"
-cp -r "config/" "~/.config/"
+
+cp -r "config/nvim/" "~/.config/nvim/"
+cp "config/starship.toml" "~/.config/starship.toml"
+
+# only copy wezterm config on macOS
+if [[ "$OS" == "macOS" ]]; then
+    cp -r "config/wezterm/" "~/.config/wezterm/"
+fi
 
 echo "Installation complete."
