@@ -24,6 +24,7 @@ if [[ "$(uname)" == "Darwin" ]]; then
     OS="macOS"
     INSTALLER="brew install"
     INSTALL_WEZTERM="brew install --cask wezterm"
+    INSTALL_STARSHIP="brew install starship"
     # Ensure Homebrew is installed
     if ! is_installed brew; then
         echo "Homebrew not found. Installing..."
@@ -34,6 +35,7 @@ elif [[ -f "/etc/os-release" ]] && grep -qi "ubuntu" /etc/os-release; then
     OS="Ubuntu"
     INSTALLER="sudo apt-get install -y"
     INSTALL_WEZTERM="sudo apt install wezterm"
+    INSTALL_STARSHIP="curl -sS https://starship.rs/install.sh | sh"
     sudo apt update
 else
     echo "Unsupported OS"
@@ -45,13 +47,15 @@ install_package "nvim" "$INSTALLER neovim"
 install_package "rg" "$INSTALLER ripgrep"
 install_package "zsh" "$INSTALLER zsh"
 install_package "wezterm" "$INSTALL_WEZTERM"
-install_package "starship" "$INSTALLER starship"
+install_package "starship" "$INSTALL_STARSHIP starship"
 
 # Check if zsh is the default shell, if not, set it
 if [[ "$SHELL" != *"zsh"* ]]; then
     echo "Changing default shell to zsh..."
-    chsh -s "$(which zsh)"
-    echo "Default shell changed to zsh. Please log out and log back in for changes to take effect."
+    if [[ "$OS" == "macOS" ]]; then
+        chsh -s "$(which zsh)"
+        echo "Default shell changed to zsh. Please log out and log back in for changes to take effect."
+    fi
 else
     echo "zsh is already the default shell."
 fi
