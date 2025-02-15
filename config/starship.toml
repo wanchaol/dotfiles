@@ -93,6 +93,10 @@ min_time = 500
 style = 'fg:gray'
 format = '[$duration]($style)'
 
+[character]
+success_symbol = "[▶](bold green)" # normal prompt
+error_symbol = "[✗](bold red)" # used if previous command failed
+
 [palettes.nord]
 dark_blue = '#5E81AC'
 blue = '#81A1C1'
