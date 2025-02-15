@@ -20,13 +20,15 @@ if [[ "$OS" == "macOS" ]]; then
 
     PATH="$PATH:/Applications/WezTerm.app/Contents/MacOS"
 
-    source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-    source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+    ZSH_SYNTAX="$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+    ZSH_SUGGEST="$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 
 elif [[ "$OS" == "Ubuntu" ]]; then
     alias ls="ls --color=auto"
     PATH="/usr/local/bin:$PATH"
     # Ubuntu-specific settings
+    ZSH_SYNTAX="/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+    ZSH_SUGGEST="/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 fi
 
 # common settings across OS
@@ -46,3 +48,8 @@ alias g="git"
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+
+# END
+# Below must be put in the end of zshrc!
+source $ZSH_SYNTAX
+source $ZSH_SUGGEST
