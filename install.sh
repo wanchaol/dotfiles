@@ -24,6 +24,7 @@ if [[ "$(uname)" == "Darwin" ]]; then
     OS="macOS"
     INSTALLER="brew install"
     INSTALL_WEZTERM="brew install --cask wezterm"
+    INSTALL_FD="brew install fd"
     INSTALL_STARSHIP="brew install starship"
     # Ensure Homebrew is installed
     if ! is_installed brew; then
@@ -33,7 +34,8 @@ if [[ "$(uname)" == "Darwin" ]]; then
 elif [[ -f "/etc/os-release" ]] && grep -qi "ubuntu" /etc/os-release; then
     echo "Detected Ubuntu"
     OS="Ubuntu"
-    INSTALLER="sudo apt-get install -y"
+    INSTALLER="sudo apt install -y"
+    INSTALL_FD="sudo apt install fd-find && ln -s $(which fdfind) ~/.local/bin/fd"
     INSTALL_WEZTERM="sudo apt install wezterm"
     INSTALL_STARSHIP="curl -sS https://starship.rs/install.sh | sh"
     sudo apt update
@@ -46,8 +48,9 @@ fi
 install_package "nvim" "$INSTALLER neovim"
 install_package "rg" "$INSTALLER ripgrep"
 install_package "zsh" "$INSTALLER zsh"
+install_package "fd" "$INSTALL_FD"
 install_package "wezterm" "$INSTALL_WEZTERM"
-install_package "starship" "$INSTALL_STARSHIP starship"
+install_package "starship" "$INSTALL_STARSHIP"
 
 # Check if zsh is the default shell, if not, set it
 if [[ "$SHELL" != *"zsh"* ]]; then
