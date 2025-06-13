@@ -37,6 +37,8 @@ elif [[ -f "/etc/os-release" ]] && grep -qi "ubuntu" /etc/os-release; then
   INSTALL_FD="sudo apt install fd-find && ln -s $(which fdfind) ~/.local/bin/fd"
   INSTALL_STARSHIP="curl -sS https://starship.rs/install.sh | sh"
   sudo apt update
+  # ubuntu install zsh
+  install_package "zsh" "$INSTALLER zsh"
 else
   echo "Unsupported OS"
   exit 1
@@ -45,9 +47,9 @@ fi
 # Install necessary packages
 install_package "nvim" "$INSTALLER neovim"
 install_package "rg" "$INSTALLER ripgrep"
-install_package "zsh" "$INSTALLER zsh"
 install_package "fd" "$INSTALL_FD"
 install_package "starship" "$INSTALL_STARSHIP"
+install_package "uv" "curl -LsSf https://astral.sh/uv/install.sh | sh"
 
 # Check if zsh is the default shell, if not, set it
 if [[ "$SHELL" != *"zsh"* ]]; then
@@ -61,10 +63,10 @@ else
 fi
 
 # move configs to dst
-cp "zshrc" "~/.zshrc"
-cp ".tmux.conf" "~/.tmux.conf"
+cp zshrc ~/.zshrc
+cp .tmux.conf ~/.tmux.conf
 mkdir -p "~/.config"
 
-cp -r "config/" "~/.config/"
+cp -r config ~/.config
 
 echo "Installation complete."

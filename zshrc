@@ -53,3 +53,5 @@ alias l='ls -CF'
 # Below must be put in the end of zshrc!
 source $ZSH_SYNTAX
 source $ZSH_SUGGEST
+
+. "$HOME/.local/bin/env"
