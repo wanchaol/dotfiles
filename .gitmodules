@@ -1,0 +1,3 @@
+[submodule "config/tmux/plugins/tmux-dotbar"]
+	path = config/tmux/plugins/tmux-dotbar
+	url = https://github.com/vaaleyard/tmux-dotbar.git
