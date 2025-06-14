@@ -43,6 +43,9 @@ export EDITOR=nvim
 alias vim="nvim"
 alias vi="nvim"
 alias g="git"
+alias ta="tmux attach -t"
+alias tns="tmux new-session -s"
+alias tls="tmux ls"
 
 # some more ls aliases
 alias ll='ls -alF'
