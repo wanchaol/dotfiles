@@ -6,8 +6,10 @@ return {
   opts = {
     -- add any opts here
     provider = "openai",
-    openai = {
-      model = "chatgpt-4o-latest",
+    providers = {
+      openai = {
+        model = "chatgpt-4o-latest",
+      },
     },
   },
   dependencies = {

@@ -25,6 +25,7 @@ if [[ "$(uname)" == "Darwin" ]]; then
   INSTALLER="brew install"
   INSTALL_FD="brew install fd"
   INSTALL_STARSHIP="brew install starship"
+  # INSTALL_NODE="brew install node"
   # Ensure Homebrew is installed
   if ! is_installed brew; then
     echo "Homebrew not found. Installing..."
@@ -36,15 +37,15 @@ elif [[ -f "/etc/os-release" ]] && grep -qi "ubuntu" /etc/os-release; then
   INSTALLER="sudo apt install -y"
   INSTALL_FD="sudo apt install fd-find && ln -s $(which fdfind) ~/.local/bin/fd"
   INSTALL_STARSHIP="curl -sS https://starship.rs/install.sh | sh"
+  # INSTALL_NODE=""
   sudo apt update
-  # ubuntu install zsh
-  install_package "zsh" "$INSTALLER zsh"
 else
   echo "Unsupported OS"
   exit 1
 fi
 
 # Install necessary packages
+install_package "zsh" "$INSTALLER zsh"
 install_package "nvim" "$INSTALLER neovim"
 install_package "rg" "$INSTALLER ripgrep"
 install_package "fd" "$INSTALL_FD"

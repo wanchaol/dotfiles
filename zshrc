@@ -37,7 +37,9 @@ export PATH
 
 eval "$(starship init zsh)"
 
-export EDITOR=nvim
+# setting EDITOR would interfere with tmux status-keys
+# export EDITOR=nvim
+export GIT_EDITOR=nvim
 
 # alias
 alias vim="nvim"
@@ -45,7 +47,10 @@ alias vi="nvim"
 alias g="git"
 alias ta="tmux attach -t"
 alias tns="tmux new-session -s"
+alias tks="tmux kill-session -t"
 alias tls="tmux ls"
+alias tlk="tmux list-keys | less"
+
 
 # some more ls aliases
 alias ll='ls -alF'
