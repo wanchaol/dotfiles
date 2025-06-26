@@ -18,17 +18,12 @@ if [[ "$OS" == "macOS" ]]; then
     # The next line enables shell command completion for gcloud.
     if [ -f '/Users/wanchaol/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/wanchaol/google-cloud-sdk/completion.zsh.inc'; fi
 
-    PATH="$PATH:/Applications/WezTerm.app/Contents/MacOS"
-
-    ZSH_SYNTAX="$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-    ZSH_SUGGEST="$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+    # for uv
+    source $HOME/.local/bin/env
 
 elif [[ "$OS" == "Ubuntu" ]]; then
     alias ls="ls --color=auto"
     PATH="/usr/local/bin:$PATH"
-    # Ubuntu-specific settings
-    ZSH_SYNTAX="/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-    ZSH_SUGGEST="/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 fi
 
 # common settings across OS
@@ -59,7 +54,6 @@ alias l='ls -CF'
 
 # END
 # Below must be put in the end of zshrc!
-source $ZSH_SYNTAX
-source $ZSH_SUGGEST
+source ~/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-. "$HOME/.local/bin/env"

@@ -31,6 +31,8 @@ if [[ "$(uname)" == "Darwin" ]]; then
     echo "Homebrew not found. Installing..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   fi
+  # install uv on MacOS only now
+  install_package "uv" "curl -LsSf https://astral.sh/uv/install.sh | sh"
 elif [[ -f "/etc/os-release" ]] && grep -qi "ubuntu" /etc/os-release; then
   echo "Detected Ubuntu"
   OS="Ubuntu"
@@ -50,7 +52,6 @@ install_package "nvim" "$INSTALLER neovim"
 install_package "rg" "$INSTALLER ripgrep"
 install_package "fd" "$INSTALL_FD"
 install_package "starship" "$INSTALL_STARSHIP"
-install_package "uv" "curl -LsSf https://astral.sh/uv/install.sh | sh"
 
 # Check if zsh is the default shell, if not, set it
 if [[ "$SHELL" != *"zsh"* ]]; then
@@ -64,10 +65,14 @@ else
 fi
 
 # move configs to dst
+git clone --depth 1 https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/plugins/zsh-autosuggestions
+git clone --depth 1 https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/plugins/zsh-syntax-highlighting
+
 cp zshrc ~/.zshrc
+
 cp .tmux.conf ~/.tmux.conf
 mkdir -p "~/.config"
 
-cp -r config ~/.config
+cp -a config/. ~/.config
 
 echo "Installation complete."
