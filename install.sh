@@ -25,6 +25,7 @@ if [[ "$(uname)" == "Darwin" ]]; then
   INSTALLER="brew install"
   INSTALL_FD="brew install fd"
   INSTALL_STARSHIP="brew install starship"
+  INSTALL_NVIM="brew install neovim"
   # INSTALL_NODE="brew install node"
   # Ensure Homebrew is installed
   if ! is_installed brew; then
@@ -39,6 +40,7 @@ elif [[ -f "/etc/os-release" ]] && grep -qi "ubuntu" /etc/os-release; then
   INSTALLER="sudo apt install -y"
   INSTALL_FD="sudo apt install fd-find && ln -s $(which fdfind) ~/.local/bin/fd"
   INSTALL_STARSHIP="curl -sS https://starship.rs/install.sh | sh"
+  INSTALL_NVIM="curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz & rm -rf ~/.local/nvim & mkdir -p ~/.local/ & tar -C ~/.local -xzf nvim-linux-x86_64.tar.gz"
   # INSTALL_NODE=""
   sudo apt update
 else
@@ -48,9 +50,9 @@ fi
 
 # Install necessary packages
 install_package "zsh" "$INSTALLER zsh"
-install_package "nvim" "$INSTALLER neovim"
 install_package "rg" "$INSTALLER ripgrep"
 install_package "fd" "$INSTALL_FD"
+install_package "nvim" "$INSTALL_NVIM"
 install_package "starship" "$INSTALL_STARSHIP"
 
 # Check if zsh is the default shell, if not, set it
@@ -67,6 +69,9 @@ fi
 # move configs to dst
 git clone --depth 1 https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/plugins/zsh-autosuggestions
 git clone --depth 1 https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/plugins/zsh-syntax-highlighting
+
+# submodule init for dotfiles repo (i.e. init the tmux plugin)
+git submodule update --init --recursive
 
 cp zshrc ~/.zshrc
 

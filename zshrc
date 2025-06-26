@@ -19,11 +19,12 @@ if [[ "$OS" == "macOS" ]]; then
     if [ -f '/Users/wanchaol/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/wanchaol/google-cloud-sdk/completion.zsh.inc'; fi
 
     # for uv
+    PATH="$PATH:$HOME/.local/bin"
     source $HOME/.local/bin/env
 
 elif [[ "$OS" == "Ubuntu" ]]; then
     alias ls="ls --color=auto"
-    PATH="/usr/local/bin:$PATH"
+    PATH="$PATH:$HOME/.local/nvim-linux-x86_64/bin:/usr/local/bin"
 fi
 
 # common settings across OS
