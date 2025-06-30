@@ -1,0 +1,12 @@
+[user]
+  email = wanchaol@users.noreply.github.com
+  name = Wanchao Liang
+
+[alias]
+  co = checkout
+  br = branch
+  cm = commit
+  st = status
+  last = log -1 HEAD
+  unstage = reset HEAD --
+

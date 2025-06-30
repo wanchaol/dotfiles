@@ -74,6 +74,7 @@ git clone --depth 1 https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.
 git submodule update --init --recursive
 
 cp zshrc ~/.zshrc
+cp .gitconfig ~/.gitconfig
 
 cp .tmux.conf ~/.tmux.conf
 mkdir -p "~/.config"
