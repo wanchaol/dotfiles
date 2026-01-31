@@ -1,4 +1,5 @@
-theme = "onedark"
+# theme = "onedark"
+theme = "catppuccin_frappe"
 
 [editor]
 true-color = true
@@ -23,16 +24,8 @@ render = true
 character = "│"
 skip-levels = 1
 
-[keys.select]
-0 = "goto_line_start"
-"$" = "goto_line_end"
-G = "goto_file_end"
-
-[keys.normal]
-0 = "goto_line_start"
-"$" = "goto_line_end"
-G = "goto_file_end"
-V = ["select_mode", "extend_to_line_bounds"]
+[editor.cursor-shape]
+insert = "bar"
 
 [editor.statusline]
 left = [
@@ -60,3 +53,19 @@ right = [
   "selections",
 ]
 separator = "│"
+
+[keys.select]
+0 = "goto_line_start"
+"$" = "goto_line_end"
+G = "goto_file_end"
+k = ["extend_line_up", "extend_to_line_bounds"]
+j = ["extend_line_down", "extend_to_line_bounds"]
+
+[keys.normal]
+0 = "goto_line_start"
+"$" = "goto_line_end"
+G = "goto_file_end"
+V = ["select_mode", "extend_to_line_bounds"]
+# Escape the madness! No more fighting with the cursor! Or with multiple cursors!
+esc = ["collapse_selection", "keep_primary_selection"]
+
