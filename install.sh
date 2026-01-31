@@ -86,6 +86,7 @@ install_helix() {
       tar -xJf "$TARBALL" -C "$HELIX_DIR" --strip-components=1
       rm "$TARBALL"
       echo "Helix installed to: $HELIX_DIR"
+      mkdir -p "$HOME/.local/bin"
       ln -sf "$HELIX_DIR/hx" "$HOME/.local/bin/hx"
 
       # Copy runtime directory for Ubuntu

@@ -23,6 +23,14 @@ fi
 
 export PATH
 
+hx() {
+    if [[ -f "pyproject.toml" ]]; then
+        uv run hx "$@"
+    else
+        command hx "$@"
+    fi
+}
+
 # setting EDITOR would interfere with tmux status-keys
 # export EDITOR=nvim
 export GIT_EDITOR=hx
@@ -59,3 +67,4 @@ if [[ ! ${ZIM_HOME}/init.zsh -nt ${ZIM_CONFIG_FILE:-${ZDOTDIR:-${HOME}}/.zimrc} 
 fi
 # Initialize modules.
 source ${ZIM_HOME}/init.zsh
+
