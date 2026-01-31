@@ -4,7 +4,12 @@ theme = "onedark"
 true-color = true
 rulers = [120]
 color-modes = true
+completion-replace = true
 trim-trailing-whitespace = true
+end-of-line-diagnostics = "hint"
+
+[editor.inline-diagnostics]
+cursor-line = "warning" # show warnings and errors on the cursorline inline
 
 [editor.lsp]
 display-messages = true
@@ -18,9 +23,6 @@ render = true
 character = "│"
 skip-levels = 1
 
-[editor.inline-diagnostics]
-cursor-line = "warning" # show warnings and errors on the cursorline inline
-
 [keys.select]
 0 = "goto_line_start"
 "$" = "goto_line_end"
@@ -32,3 +34,29 @@ G = "goto_file_end"
 G = "goto_file_end"
 V = ["select_mode", "extend_to_line_bounds"]
 
+[editor.statusline]
+left = [
+  "mode",
+  "spinner",
+  "version-control",
+  "spacer",
+  "separator",
+  "file-name",
+  "read-only-indicator",
+  "file-modification-indicator",
+
+]
+center = []
+right = [
+  "diagnostics",
+  "workspace-diagnostics",
+  "position",
+  "total-line-numbers",
+  "position-percentage",
+  "file-encoding",
+  "file-line-ending",
+  "file-type",
+  "register",
+  "selections",
+]
+separator = "│"
