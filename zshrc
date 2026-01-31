@@ -43,6 +43,8 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
+alias reload_zsh='exec zsh'
+
 # zimfw related configs
 ZIM_CONFIG_FILE=~/.config/zsh/zimrc
 ZIM_HOME=${ZDOTDIR:-${HOME}}/.zim
@@ -57,8 +59,3 @@ if [[ ! ${ZIM_HOME}/init.zsh -nt ${ZIM_CONFIG_FILE:-${ZDOTDIR:-${HOME}}/.zimrc} 
 fi
 # Initialize modules.
 source ${ZIM_HOME}/init.zsh
-
-# END
-# Below must be put in the end of zshrc!
-# source ~/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-# source ~/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
