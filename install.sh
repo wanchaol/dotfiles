@@ -5,16 +5,108 @@ is_installed() {
   command -v "$1" &>/dev/null
 }
 
-# Install package if not already installed
-install_package() {
-  local package_name=$1
-  local install_cmd=$2
-
-  if is_installed "$package_name"; then
-    echo "$package_name is already installed. Skipping..."
+# Install zsh
+install_zsh() {
+  if is_installed "zsh"; then
+    echo "zsh is already installed. Skipping..."
   else
-    echo "Installing $package_name..."
-    eval "$install_cmd"
+    echo "Installing zsh..."
+    $INSTALLER zsh
+  fi
+}
+
+# Install ripgrep
+install_ripgrep() {
+  if is_installed "rg"; then
+    echo "ripgrep is already installed. Skipping..."
+  else
+    echo "Installing ripgrep..."
+    $INSTALLER ripgrep
+  fi
+}
+
+# Install fd
+install_fd() {
+  if is_installed "fd"; then
+    echo "fd is already installed. Skipping..."
+  else
+    echo "Installing fd..."
+    if [[ "$OS" == "macOS" ]]; then
+      brew install fd
+    elif [[ "$OS" == "Ubuntu" ]]; then
+      sudo apt install -y fd-find
+      ln -s $(which fdfind) ~/.local/bin/fd
+    fi
+  fi
+}
+
+# Install starship
+install_starship() {
+  if is_installed "starship"; then
+    echo "starship is already installed. Skipping..."
+  else
+    echo "Installing starship..."
+    if [[ "$OS" == "macOS" ]]; then
+      brew install starship
+    elif [[ "$OS" == "Ubuntu" ]]; then
+      curl -sS https://starship.rs/install.sh | sh -- -y -b ~/.local/bin
+    fi
+  fi
+}
+
+install_zimfw() {
+  if is_installed "zimfw"; then
+    echo "zimfw is already installed. Skipping..."
+  else
+    echo "Installing zimfw..."
+    if [[ "$OS" == "Ubuntu" ]]; then
+      curl -fsSL https://raw.githubusercontent.com/zimfw/install/master/install.zsh | zsh
+    fi
+  fi
+}
+
+
+# Install helix
+install_helix() {
+  if is_installed "hx"; then
+    echo "helix is already installed. Skipping..."
+  else
+    echo "Installing helix..."
+    if [[ "$OS" == "macOS" ]]; then
+      brew install helix
+    elif [[ "$OS" == "Ubuntu" ]]; then
+      HELIX_VERSION="25.07.1"
+      HELIX_ARCH="$(uname -m)-linux"
+      HELIX_DIR="$HOME/.local/helix_${HELIX_VERSION}"
+      TARBALL="helix-${HELIX_VERSION}-${HELIX_ARCH}.tar.xz"
+
+      curl -LO "https://github.com/helix-editor/helix/releases/download/${HELIX_VERSION}/${TARBALL}"
+      rm -rf "$HELIX_DIR"
+      mkdir -p "$HELIX_DIR"
+      tar -xJf "$TARBALL" -C "$HELIX_DIR" --strip-components=1
+      rm "$TARBALL"
+      echo "Helix installed to: $HELIX_DIR"
+      ln -sf "$HELIX_DIR/hx" "$HOME/.local/bin/hx"
+
+      # Copy runtime directory for Ubuntu
+      mkdir -p ~/.config/helix
+      if [[ -d "$HELIX_DIR/runtime" ]]; then
+        cp -r "$HELIX_DIR/runtime" ~/.config/helix/runtime
+        echo "Helix runtime copied to ~/.config/helix/runtime"
+      fi
+    fi
+  fi
+}
+
+# Install uv (macOS only)
+install_uv() {
+  if [[ "$OS" == "macOS" ]]; then
+    if is_installed "uv"; then
+      echo "uv is already installed. Skipping..."
+    else
+      echo "Installing uv..."
+      curl -LsSf https://astral.sh/uv/install.sh | sh
+    fi
   fi
 }
 
@@ -23,25 +115,15 @@ if [[ "$(uname)" == "Darwin" ]]; then
   echo "Detected macOS"
   OS="macOS"
   INSTALLER="brew install"
-  INSTALL_FD="brew install fd"
-  INSTALL_STARSHIP="brew install starship"
-  INSTALL_NVIM="brew install neovim"
-  # INSTALL_NODE="brew install node"
   # Ensure Homebrew is installed
   if ! is_installed brew; then
     echo "Homebrew not found. Installing..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   fi
-  # install uv on MacOS only now
-  install_package "uv" "curl -LsSf https://astral.sh/uv/install.sh | sh"
 elif [[ -f "/etc/os-release" ]] && grep -qi "ubuntu" /etc/os-release; then
   echo "Detected Ubuntu"
   OS="Ubuntu"
   INSTALLER="sudo apt install -y"
-  INSTALL_FD="sudo apt install fd-find && ln -s $(which fdfind) ~/.local/bin/fd"
-  INSTALL_STARSHIP="curl -sS https://starship.rs/install.sh | sh"
-  INSTALL_NVIM="curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz & rm -rf ~/.local/nvim & mkdir -p ~/.local/ & tar -C ~/.local -xzf nvim-linux-x86_64.tar.gz"
-  # INSTALL_NODE=""
   sudo apt update
 else
   echo "Unsupported OS"
@@ -49,11 +131,12 @@ else
 fi
 
 # Install necessary packages
-install_package "zsh" "$INSTALLER zsh"
-install_package "rg" "$INSTALLER ripgrep"
-install_package "fd" "$INSTALL_FD"
-install_package "nvim" "$INSTALL_NVIM"
-install_package "starship" "$INSTALL_STARSHIP"
+install_zsh
+install_zimfw
+install_ripgrep
+install_fd
+install_helix
+install_uv
 
 # Check if zsh is the default shell, if not, set it
 if [[ "$SHELL" != *"zsh"* ]]; then
@@ -66,15 +149,12 @@ else
   echo "zsh is already the default shell."
 fi
 
-# move configs to dst
-git clone --depth 1 https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/plugins/zsh-autosuggestions
-git clone --depth 1 https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/plugins/zsh-syntax-highlighting
-
 # submodule init for dotfiles repo (i.e. init the tmux plugin)
 git submodule update --init --recursive
 
 cp zshrc ~/.zshrc
 cp .gitconfig ~/.gitconfig
+cp zshenv ~/.zshenv
 
 cp .tmux.conf ~/.tmux.conf
 mkdir -p "~/.config"

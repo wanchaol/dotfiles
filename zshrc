@@ -10,36 +10,26 @@ fi
 # OS-specific configurations
 if [[ "$OS" == "macOS" ]]; then
     alias ls="ls -G"
-    # macOS-specific settings
-
-    # The next line updates PATH for the Google Cloud SDK.
-    if [ -f '/Users/wanchaol/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/wanchaol/google-cloud-sdk/path.zsh.inc'; fi
-
-    # The next line enables shell command completion for gcloud.
-    if [ -f '/Users/wanchaol/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/wanchaol/google-cloud-sdk/completion.zsh.inc'; fi
-
     # for uv
     PATH="$PATH:$HOME/.local/bin"
     source $HOME/.local/bin/env
 
 elif [[ "$OS" == "Ubuntu" ]]; then
     alias ls="ls --color=auto"
-    PATH="$PATH:$HOME/.local/nvim-linux-x86_64/bin:/usr/local/bin"
+    PATH="$PATH:$HOME/.local/bin"
 fi
 
 # common settings across OS
 
 export PATH
 
-eval "$(starship init zsh)"
-
 # setting EDITOR would interfere with tmux status-keys
 # export EDITOR=nvim
-export GIT_EDITOR=nvim
+export GIT_EDITOR=hx
 
 # alias
-alias vim="nvim"
-alias vi="nvim"
+alias vim="hx"
+alias vi="hx"
 alias g="git"
 alias ta="tmux attach -t"
 alias tns="tmux new-session -s"
@@ -53,8 +43,22 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
+# zimfw related configs
+ZIM_CONFIG_FILE=~/.config/zsh/zimrc
+ZIM_HOME=${ZDOTDIR:-${HOME}}/.zim
+# Download zimfw plugin manager if missing.
+if [[ ! -e ${ZIM_HOME}/zimfw.zsh ]]; then
+  curl -fsSL --create-dirs -o ${ZIM_HOME}/zimfw.zsh \
+      https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+fi
+# Install missing modules and update ${ZIM_HOME}/init.zsh if missing or outdated.
+if [[ ! ${ZIM_HOME}/init.zsh -nt ${ZIM_CONFIG_FILE:-${ZDOTDIR:-${HOME}}/.zimrc} ]]; then
+  source ${ZIM_HOME}/zimfw.zsh init
+fi
+# Initialize modules.
+source ${ZIM_HOME}/init.zsh
+
 # END
 # Below must be put in the end of zshrc!
-source ~/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source ~/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-
+# source ~/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# source ~/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
