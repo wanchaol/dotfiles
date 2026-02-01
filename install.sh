@@ -40,31 +40,14 @@ install_fd() {
   fi
 }
 
-# Install starship
-install_starship() {
-  if is_installed "starship"; then
-    echo "starship is already installed. Skipping..."
-  else
-    echo "Installing starship..."
-    if [[ "$OS" == "macOS" ]]; then
-      brew install starship
-    elif [[ "$OS" == "Ubuntu" ]]; then
-      curl -sS https://starship.rs/install.sh | sh -- -y -b ~/.local/bin
-    fi
-  fi
-}
-
 install_zimfw() {
   if is_installed "zimfw"; then
     echo "zimfw is already installed. Skipping..."
   else
     echo "Installing zimfw..."
-    if [[ "$OS" == "Ubuntu" ]]; then
-      curl -fsSL https://raw.githubusercontent.com/zimfw/install/master/install.zsh | zsh
-    fi
+    curl -fsSL https://raw.githubusercontent.com/zimfw/install/master/install.zsh | zsh
   fi
 }
-
 
 # Install helix
 install_helix() {
