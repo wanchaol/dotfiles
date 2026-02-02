@@ -38,6 +38,7 @@ zmodule eriner
 # Completion
 #
 
+zmodule fzf
 # Additional completion definitions for Zsh.
 zmodule zsh-users/zsh-completions --fpath src
 # Enables and configures smart and extensive tab completion, must be sourced

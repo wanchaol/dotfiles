@@ -40,6 +40,16 @@ install_fd() {
   fi
 }
 
+# Install fzf
+install_fzf() {
+  if is_installed "fzf"; then
+    echo "fzf is already installed. Skipping..."
+  else
+    echo "Installing fzf..."
+    $INSTALLER fzf
+  fi
+}
+
 install_zimfw() {
   if is_installed "zimfw"; then
     echo "zimfw is already installed. Skipping..."
@@ -119,6 +129,7 @@ install_zsh
 install_zimfw
 install_ripgrep
 install_fd
+install_fzf
 install_helix
 install_uv
 
