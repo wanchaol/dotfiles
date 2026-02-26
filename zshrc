@@ -31,6 +31,14 @@ hx() {
     fi
 }
 
+ghstack() {
+    if [[ -f "pyproject.toml" ]]; then
+        uvx ghstack "$@"
+    else
+        command ghstack "$@"
+    fi
+}
+
 # setting EDITOR would interfere with tmux status-keys
 # export EDITOR=nvim
 export GIT_EDITOR=hx

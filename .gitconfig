@@ -1,3 +1,10 @@
+[pager]
+    branch = false
+
+[core]
+    fsmonitor = true
+    untrackedCache = true
+
 [user]
   email = wanchaol@users.noreply.github.com
   name = Wanchao Liang
@@ -6,7 +13,10 @@
   co = checkout
   br = branch
   cm = commit
+  am = commit --amend
   st = status
+  rb = rebase
+  lg = log --graph --decorate --pretty=oneline --abbrev-commit
   last = log -1 HEAD
   unstage = reset HEAD --
-
+  undoam = reset --soft HEAD@{1}
