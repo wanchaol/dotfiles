@@ -20,6 +20,7 @@ zmodule utility
 # <-- Normally new modules should be added here. Check each module documentation
 # for any caveats.
 
+zmodule direnv
 
 #
 # Prompt

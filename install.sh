@@ -104,6 +104,16 @@ install_uv() {
   fi
 }
 
+# Install direnv
+install_direnv() {
+  if is_installed "direnv"; then
+    echo "direnv is already installed. Skipping..."
+  else
+    echo "Installing direnv..."
+    $INSTALLER direnv
+  fi
+}
+
 # Detect OS
 if [[ "$(uname)" == "Darwin" ]]; then
   echo "Detected macOS"
@@ -132,6 +142,7 @@ install_fd
 install_fzf
 install_helix
 install_uv
+install_direnv
 
 # Check if zsh is the default shell, if not, set it
 if [[ "$SHELL" != *"zsh"* ]]; then

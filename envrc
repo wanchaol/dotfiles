@@ -1,0 +1,5 @@
+# In .envrc (loaded automatically by direnv on cd)
+# put this file to the repo that have uv configured
+VENV_PYTHON=$(uv run which python)
+VENV_DIR=$(dirname $(dirname "$VENV_PYTHON"))
+ln -sfn "$VENV_DIR" .venv
