@@ -1,8 +1,34 @@
 #!/bin/bash
 
 # Function to check if a package is installed
+# Map package names to the actual binary names to check
+get_binary_name() {
+  case "$1" in
+    fd)      echo "fdfind fd" ;;
+    ripgrep) echo "rg" ;;
+    bat)     echo "batcat bat" ;;
+    zimfw)   echo "" ;;  # special case, no binary
+    *)       echo "$1" ;;
+  esac
+}
+
 is_installed() {
-  command -v "$1" &>/dev/null
+  local pkg="$1"
+
+  # Special cases with no binary
+  case "$pkg" in
+    zimfw) [[ -d "$HOME/.zim" ]] && return 0 || return 1 ;;
+  esac
+
+  # Check all possible binary names
+  for bin in $(get_binary_name "$pkg"); do
+    command -v "$bin" &>/dev/null && return 0
+  done
+  return 1
+}
+
+version_lte() {
+  [[ "$(printf '%s\n' "$1" "$2" | sort -V | head -n1)" == "$1" ]]
 }
 
 # Install zsh
@@ -114,10 +140,33 @@ install_direnv() {
   fi
 }
 
+# Install lazygit
+install_lazygit() {
+  if is_installed "lazygit"; then
+    echo "lazygit is already installed. Skipping..."
+  else
+    echo "Installing lazygit..."
+    if [[ "$OS" == "macOS" ]]; then
+      brew install lazygit
+    elif [[ "$OS" == "Ubuntu" ]]; then
+      if version_lte "$OS_VERSION" "25.04"; then
+        LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | \grep -Po '"tag_name": *"v\K[^"]*')
+        curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_linux_arm64.tar.gz"
+        tar xf lazygit.tar.gz lazygit
+        sudo install lazygit -D -t /usr/local/bin/
+        rm lazygit lazygit.tar.gz
+      else
+        $INSTALLER lazygit
+      fi
+    fi
+  fi
+}
+
 # Detect OS
 if [[ "$(uname)" == "Darwin" ]]; then
   echo "Detected macOS"
   OS="macOS"
+  OS_VERSION=$(sw_vers -productVersion)
   INSTALLER="brew install"
   # Ensure Homebrew is installed
   if ! is_installed brew; then
@@ -125,8 +174,9 @@ if [[ "$(uname)" == "Darwin" ]]; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   fi
 elif [[ -f "/etc/os-release" ]] && grep -qi "ubuntu" /etc/os-release; then
-  echo "Detected Ubuntu"
   OS="Ubuntu"
+  OS_VERSION=$(grep -oP 'VERSION_ID="\K[^"]+' /etc/os-release)y
+  echo "Detected $OS $OS_VERSION"
   INSTALLER="sudo apt install -y"
   sudo apt update
 else
@@ -143,6 +193,7 @@ install_fzf
 install_helix
 install_uv
 install_direnv
+install_lazygit
 
 # Check if zsh is the default shell, if not, set it
 if [[ "$SHELL" != *"zsh"* ]]; then
