@@ -1,0 +1,5 @@
+os:
+  edit: 'tmux split-window -h "hx {{filename}}"'
+  editAtLine: 'tmux split-window -h "hx {{filename}}:{{line}}"'
+  editAtLineAndWait: 'tmux split-window -h "hx {{filename}}:{{line}}"'
+  editInTerminal: false

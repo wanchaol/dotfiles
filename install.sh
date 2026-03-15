@@ -140,24 +140,27 @@ install_direnv() {
   fi
 }
 
-# # Install gitui
-# install_gitui() {
-#   if is_installed "gitui"; then
-#     echo "gitui is already installed. Skipping..."
-#   else
-#     echo "Installing gitui..."
-#     if [[ "$OS" == "macOS" ]]; then
-#       brew install gitui
-#     elif [[ "$OS" == "Ubuntu" ]]; then
-#       GITUI_VERSION=$(curl -s https://api.github.com/repos/gitui-org/gitui/releases/latest | grep '"tag_name"' | cut -d '"' -f 4)
-#       echo $GITUI_VERSION
-#       curl -Lo gitui.tar.gz "https://github.com/gitui-org/gitui/releases/download/${GITUI_VERSION}/gitui-linux-aarch64.tar.gz"
-#       tar xf gitui.tar.gz
-#       sudo install gitui -D -t /usr/local/bin/
-#       rm gitui.tar.gz gitui
-#     fi
-#   fi
-# }
+# Install lazygit
+install_lazygit() {
+  if is_installed "lazygit"; then
+    echo "lazygit is already installed. Skipping..."
+  else
+    echo "Installing lazygit..."
+    if [[ "$OS" == "macOS" ]]; then
+      brew install lazygit
+    elif [[ "$OS" == "Ubuntu" ]]; then
+      if version_lte "$OS_VERSION" "25.04"; then
+        LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | \grep -Po '"tag_name": *"v\K[^"]*')
+        curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_linux_arm64.tar.gz"
+        tar xf lazygit.tar.gz lazygit
+        sudo install lazygit -D -t /usr/local/bin/
+        rm lazygit lazygit.tar.gz
+      else
+        $INSTALLER lazygit
+      fi
+    fi
+  fi
+}
 
 # Detect OS
 if [[ "$(uname)" == "Darwin" ]]; then
@@ -190,6 +193,7 @@ install_fzf
 install_helix
 install_uv
 install_direnv
+install_lazygit
 
 # Check if zsh is the default shell, if not, set it
 if [[ "$SHELL" != *"zsh"* ]]; then
